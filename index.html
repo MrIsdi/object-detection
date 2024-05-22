@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Object Detection Web App</title>
+    <link rel="shortcut icon" href="./images/logo.svg" type="image/x-icon" />
+    <meta
+      name="description"
+      content="Object Detection Web App adalah sebuah website aplikasi yang mengimplementasikan teknologi computer vision dengan menggunakan model YOLOv8. Prosesing untuk mengintegrasikan model menggunakan library onnxruntime-web dan opencv js"
+    />
+    <meta
+      name="keywords"
+      content="opencvjs, onnxruntime-web, yolov8, html, css, javascript"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=7" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="author" content="Muhammad Ridho Isdi" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      async
+      src="./js/opencv.js"
+      type="text/javascript"
+      onload="onOpenCvReady();"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+  </head>
+  <body>
+    <main class="min-h-screen flex gap-4 bg-[url('./images/bg.jpg')] bg-cover">
+      <aside
+        class="md:w-[270px] w-full fixed z-10 md:left-0 left-[-100%] top-0 bottom-0 duration-500 backdrop-blur bg-[rgba(255,255,255,0)] shadow-[0_4px_30px_rgba(0, 0, 0, 0.1)] border border-[rgba(255,255,255,0.3)] rounded-2xl"
+        id="aside-menu"
+      >
+        <button class="p-2 absolute right-0 top-0" id="btn-aside-menu">
+          <i class="bx bx-menu text-2xl font-bold text-white"></i>
+        </button>
+        <div class="flex justify-center">
+          <img src="./images/logo.svg" class="w-20 m-8" alt="Logo" />
+        </div>
+        <div class="flex flex-col gap-4 px-4">
+          <button
+            class="h-10 border border-[rgba(255,255,255,0.3)] text-white font-bold rounded-xl flex items-center ps-4 gap-2"
+            id="btn-component-image"
+          >
+            <i class="bx bx-image text-2xl"></i>
+            <span>Image</span>
+          </button>
+          <button
+            class="h-10 border border-[rgba(255,255,255,0.3)] text-white font-bold rounded-xl flex items-center ps-4 gap-2"
+            id="btn-component-webcam"
+          >
+            <i class="bx bxs-webcam text-2xl"></i>
+            <span>Webcam</span>
+          </button>
+        </div>
+      </aside>
+      <div
+        class="md:w-[calc(100%-286px)] w-full relative md:left-[286px] left-0 duration-500"
+        id="main-menu"
+      >
+        <nav
+          class="h-[80px] relative flex items-center justify-center backdrop-blur bg-[rgba(255,255,255,0)] shadow-[0_4px_30px_rgba(0, 0, 0, 0.1)] border border-[rgba(255,255,255,0.3)] rounded-2xl"
+        >
+          <button
+            class="p-2 absolute left-0 top-1/2 -translate-y-1/2"
+            id="btn-menu"
+          >
+            <i class="bx bx-menu text-2xl font-bold text-white"></i>
+          </button>
+          <p class="text-2xl text-white font-bold md:text-left text-center">
+            Computer Vision: Object Detection Web App
+          </p>
+        </nav>
+        <div
+          class="hidden my-4 md:flex-row flex-col gap-4 md:min-h-[480px]"
+          id="component-webcam"
+        >
+          <div class="md:w-4/5 w-full">
+            <div
+              class="w-full h-[480px] flex justify-center items-center relative backdrop-blur bg-[rgba(255,255,255,0)] shadow-[0_4px_30px_rgba(0, 0, 0, 0.1)] border border-[rgba(255,255,255,0.3)] rounded-2xl"
+            >
+              <video
+                src=""
+                width="640"
+                height="480"
+                id="video"
+                class="w-full"
+              ></video>
+              <canvas
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:h-[480px] h-[350px]"
+                width="640"
+                height="640"
+                id="canvas-video"
+              ></canvas>
+            </div>
+          </div>
+          <div
+            class="md:w-1/5 w-full flex md:flex-col flex-row items-center justify-center gap-10 backdrop-blur bg-[rgba(255,255,255,0)] shadow-[0_4px_30px_rgba(0, 0, 0, 0.1)] border border-[rgba(255,255,255,0.3)] rounded-2xl"
+          >
+            <button
+              class="w-14 h-14 text-white backdrop-blur bg-[rgba(255,255,255,0)] shadow-[0_4px_30px_rgba(0, 0, 0, 0.1)] border border-[rgba(255,255,255,0.3)] rounded-2xl"
+              id="btn-on-camera"
+            >
+              <i class="bx bx-camera text-4xl"></i>
+            </button>
+            <button
+              class="w-14 h-14 text-white backdrop-blur bg-[rgba(255,255,255,0)] shadow-[0_4px_30px_rgba(0, 0, 0, 0.1)] border border-[rgba(255,255,255,0.3)] rounded-2xl"
+              id="btn-off-camera"
+            >
+              <i class="bx bx-camera-off text-4xl"></i>
+            </button>
+          </div>
+        </div>
+        <div
+          class="flex flex-col my-4 gap-4 min-h-[320px]"
+          id="component-image"
+        >
+          <div
+            class="flex items-center justify-center relative w-[320px] h-[320px] m-auto backdrop-blur bg-[rgba(255,255,255,0)] shadow-[0_4px_30px_rgba(0, 0, 0, 0.1)] border border-[rgba(255,255,255,0.3)] rounded-2xl"
+          >
+            <img
+              src=""
+              alt="logo"
+              class="hidden rounded-2xl w-[320px] h-[320px]"
+              id="image"
+            />
+            <canvas
+              class="rounded-2xl absolute"
+              width="640"
+              height="640"
+              id="canvas-image"
+              style="width: 320px"
+            >
+            </canvas>
+          </div>
+          <div class="w-[320px] m-auto flex">
+            <button
+              class="w-1/2 h-10 m-auto flex items-center justify-center gap-2 font-bold text-white backdrop-blur bg-[rgba(255,255,255,0)] shadow-[0_4px_30px_rgba(0, 0, 0, 0.1)] border border-[rgba(255,255,255,0.3)] rounded-2xl"
+              id="btn-file-image"
+            >
+              <i class="bx bx-upload text-2xl"></i>
+              <span>Upload</span>
+            </button>
+            <button
+              class="w-1/2 h-10 m-auto flex items-center justify-center gap-2 font-bold text-white backdrop-blur bg-[rgba(255,255,255,0)] shadow-[0_4px_30px_rgba(0, 0, 0, 0.1)] border border-[rgba(255,255,255,0.3)] rounded-2xl"
+              id="btn-show-image"
+            >
+              <i class="bx bx-show text-2xl"></i>
+              <span>Predict</span>
+            </button>
+          </div>
+          <input
+            type="file"
+            name="image"
+            id="file-image"
+            accept="image/*"
+            class="hidden"
+          />
+        </div>
+        <div
+          class="w-fit mb-4 backdrop-blur bg-[rgba(255,255,255,0)] shadow-[0_4px_30px_rgba(0, 0, 0, 0.1)] border border-[rgba(255,255,255,0.3)] rounded-2xl"
+        >
+          <p class="font-bold text-white text-xl hidden p-4" id="card-title">
+            List result object detection with YOLOv8
+          </p>
+        </div>
+        <div
+          class="flex gap-4 flex-wrap md:justify-start justify-center"
+          id="card-container"
+        ></div>
+      </div>
+    </main>
+
+    <script src="./js/main.js"></script>
+  </body>
+</html>
