@@ -415,8 +415,8 @@ async function processVideo(frame, cap) {
   const canvas = document.getElementById("canvas-video");
   const FPS = 30;
   cap.read(frame);
-  const model = await ort.InferenceSession.create("../models/yolov8n.onnx");
-  const nms = await ort.InferenceSession.create("../models/nms-yolov8.onnx");
+  const model = await ort.InferenceSession.create("../../models/yolov8n.onnx");
+  const nms = await ort.InferenceSession.create("../../models/nms-yolov8.onnx");
   const [data, xRatio, yRatio] = process_input(
     (img = null),
     (video = frame),
@@ -487,8 +487,12 @@ function onOpenCvReady() {
       const image = document.getElementById("image");
       const canvas = document.getElementById("canvas-image");
 
-      const model = await ort.InferenceSession.create("../model/yolov8n.onnx");
-      const nms = await ort.InferenceSession.create("../model/nms-yolov8.onnx");
+      const model = await ort.InferenceSession.create(
+        "../../models/yolov8n.onnx"
+      );
+      const nms = await ort.InferenceSession.create(
+        "../../models/nms-yolov8.onnx"
+      );
       const [data, xRatio, yRatio] = process_input(
         (img = image),
         (video = null),
