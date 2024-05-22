@@ -4,7 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Object Detection Web App</title>
-    <link rel="shortcut icon" href="./images/logo.svg" type="image/x-icon" />
+    <link
+      rel="shortcut icon"
+      href="./src/images/logo.svg"
+      type="image/x-icon"
+    />
     <meta
       name="description"
       content="Object Detection Web App adalah sebuah website aplikasi yang mengimplementasikan teknologi computer vision dengan menggunakan model YOLOv8. Prosesing untuk mengintegrasikan model menggunakan library onnxruntime-web dan opencv js"
@@ -23,14 +27,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script
       async
-      src="./js/opencv.js"
+      src="./src/js/opencv.js"
       type="text/javascript"
       onload="onOpenCvReady();"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
   </head>
   <body>
-    <main class="min-h-screen flex gap-4 bg-[url('./images/bg.jpg')] bg-cover">
+    <main
+      class="min-h-screen flex gap-4 bg-[url('./src/images/bg.jpg')] bg-cover"
+    >
       <aside
         class="md:w-[270px] w-full fixed z-10 md:left-0 left-[-100%] top-0 bottom-0 duration-500 backdrop-blur bg-[rgba(255,255,255,0)] shadow-[0_4px_30px_rgba(0, 0, 0, 0.1)] border border-[rgba(255,255,255,0.3)] rounded-2xl"
         id="aside-menu"
@@ -39,7 +45,7 @@
           <i class="bx bx-menu text-2xl font-bold text-white"></i>
         </button>
         <div class="flex justify-center">
-          <img src="./images/logo.svg" class="w-20 m-8" alt="Logo" />
+          <img src="./src/images/logo.svg" class="w-20 m-8" alt="Logo" />
         </div>
         <div class="flex flex-col gap-4 px-4">
           <button
